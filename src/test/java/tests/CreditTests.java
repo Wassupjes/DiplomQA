@@ -72,7 +72,7 @@ public class CreditTests {
         paymentPage.sendForm();
         paymentPage.getNotificationMsg("Ошибка");
 
-        String dbStatus = getValuePaymentEntity();
+        String dbStatus = getValueCreditRequestEntity();
         Assertions.assertEquals("DECLINED", dbStatus);
         //Баг - отображается уведомление об успехе операции
     }
@@ -89,8 +89,8 @@ public class CreditTests {
         paymentPage.insertCardData(cardInfo);
         paymentPage.sendForm();
 
-        assertEquals(1, paymentPage.getCountErrorsOfValidation());
-        assertEquals(noticeWrongFormat, paymentPage.getErrorOfNumberInput());
+        paymentPage.isCountErrorsOfValidation(1);
+        paymentPage.getErrorOfNumberInput(noticeWrongFormat);
         //Баг - нет валидации нулевой карты
     }
 
@@ -104,9 +104,9 @@ public class CreditTests {
         paymentPage.insertCardData(cardInfo);
         paymentPage.sendForm();
 
-        assertEquals(1, paymentPage.getCountErrorsOfValidation());
-        assertEquals("", paymentPage.getInputStr(inputNumberIndex));
-        assertEquals(noticeRequiredField, paymentPage.getErrorOfNumberInput());
+        paymentPage.isCountErrorsOfValidation(1);
+        paymentPage.checkInputValue(inputNumberIndex, "");
+        paymentPage.getErrorOfNumberInput(noticeRequiredField);
         // Баг - отображается подсказка неверного формата
     }
 
@@ -120,9 +120,9 @@ public class CreditTests {
         paymentPage.insertCardData(cardInfo);
         paymentPage.sendForm();
 
-        assertEquals(1, paymentPage.getCountErrorsOfValidation());
-        assertEquals("", paymentPage.getInputStr(inputNumberIndex));
-        assertEquals(noticeWrongFormat, paymentPage.getErrorOfNumberInput());
+        paymentPage.isCountErrorsOfValidation(1);
+        paymentPage.checkInputValue(inputNumberIndex, "");
+        paymentPage.getErrorOfNumberInput(noticeWrongFormat);
     }
 
     @Test
@@ -135,9 +135,9 @@ public class CreditTests {
         paymentPage.insertCardData(cardInfo);
         paymentPage.sendForm();
 
-        assertEquals(1, paymentPage.getCountErrorsOfValidation());
-        assertEquals("", paymentPage.getInputStr(inputNumberIndex));
-        assertEquals(noticeWrongFormat, paymentPage.getErrorOfNumberInput());
+        paymentPage.isCountErrorsOfValidation(1);
+        paymentPage.checkInputValue(inputNumberIndex, "");
+        paymentPage.getErrorOfNumberInput(noticeWrongFormat);
     }
 
     @Test
@@ -150,23 +150,24 @@ public class CreditTests {
         paymentPage.insertCardData(cardInfo);
         paymentPage.sendForm();
 
-        assertEquals(1, paymentPage.getCountErrorsOfValidation());
-        assertEquals("", paymentPage.getInputStr(inputNumberIndex));
-        assertEquals(noticeWrongFormat, paymentPage.getErrorOfNumberInput());
+        paymentPage.isCountErrorsOfValidation(1);
+        paymentPage.checkInputValue(inputNumberIndex, "");
+        paymentPage.getErrorOfNumberInput(noticeWrongFormat);
     }
 
     @Test
     @DisplayName("Поле номера карты состоящее больше чем 16 символов")
     void number17Digits() {
-        CardData cardInfo = new CardData(randomNumber(countCardNumber + 1), randomMouth(), randomYear(), randomHolder(), getCardCvc());
+        CardData cardInfo = new CardData(getApprovedCard() + "1", randomMouth(), randomYear(), randomHolder(), getCardCvc());
+        String cardNumber = cardInfo.getNumber().substring(0, cardInfo.getNumber().length() - 1);
 
         BasicPage mainPage = new BasicPage();
         PaymentPage paymentPage = mainPage.payOnCredit();
         paymentPage.insertCardData(cardInfo);
         paymentPage.sendForm();
 
-        assertEquals(0, paymentPage.getCountErrorsOfValidation());
-        assertEquals(countCardNumber, paymentPage.getInputStr(inputNumberIndex).length() - 3);
+        paymentPage.isCountErrorsOfValidation(0);
+        paymentPage.checkInputValue(inputNumberIndex, cardNumber);
     }
 
     @Test
@@ -179,8 +180,8 @@ public class CreditTests {
         paymentPage.insertCardData(cardInfo);
         paymentPage.sendForm();
 
-        assertEquals(1, paymentPage.getCountErrorsOfValidation());
-        assertEquals(noticeWrongFormat, paymentPage.getErrorOfNumberInput());
+        paymentPage.isCountErrorsOfValidation(1);
+        paymentPage.getErrorOfNumberInput(noticeWrongFormat);
     }
 
     @Test
@@ -193,9 +194,9 @@ public class CreditTests {
         paymentPage.insertCardData(cardInfo);
         paymentPage.sendForm();
 
-        assertEquals(1, paymentPage.getCountErrorsOfValidation());
-        assertEquals("", paymentPage.getInputStr(inputMouthIndex));
-        assertEquals(noticeRequiredField, paymentPage.getErrorOfMouthInput());
+        paymentPage.isCountErrorsOfValidation(1);
+        paymentPage.checkInputValue(inputMouthIndex, "");
+        paymentPage.getErrorOfMouthInput(noticeRequiredField);
         // Баг - отображается подсказка неверного формата
     }
 
@@ -209,8 +210,8 @@ public class CreditTests {
         paymentPage.insertCardData(cardInfo);
         paymentPage.sendForm();
 
-        assertEquals(1, paymentPage.getCountErrorsOfValidation());
-        assertEquals(noticeInvalidExpirationDate, paymentPage.getErrorOfMouthInput());
+        paymentPage.isCountErrorsOfValidation(1);
+        paymentPage.getErrorOfMouthInput(noticeInvalidExpirationDate);
         // Баг - нет валидации поля на ввод 00
     }
 
@@ -224,8 +225,8 @@ public class CreditTests {
         paymentPage.insertCardData(cardInfo);
         paymentPage.sendForm();
 
-        assertEquals(1, paymentPage.getCountErrorsOfValidation());
-        assertEquals(noticeInvalidExpirationDate, paymentPage.getErrorOfMouthInput());
+        paymentPage.isCountErrorsOfValidation(1);
+        paymentPage.getErrorOfMouthInput(noticeInvalidExpirationDate);
     }
 
     @Test
@@ -238,8 +239,8 @@ public class CreditTests {
         paymentPage.insertCardData(cardInfo);
         paymentPage.sendForm();
 
-        assertEquals(1, paymentPage.getCountErrorsOfValidation());
-        assertEquals(noticeInvalidExpirationDate, paymentPage.getErrorOfMouthInput());
+        paymentPage.isCountErrorsOfValidation(1);
+        paymentPage.getErrorOfMouthInput(noticeInvalidExpirationDate);
     }
 
     @Test
@@ -252,9 +253,9 @@ public class CreditTests {
         paymentPage.insertCardData(cardInfo);
         paymentPage.sendForm();
 
-        assertEquals(1, paymentPage.getCountErrorsOfValidation());
-        assertEquals("", paymentPage.getInputStr(inputMouthIndex));
-        assertEquals(noticeWrongFormat, paymentPage.getErrorOfMouthInput());
+        paymentPage.isCountErrorsOfValidation(1);
+        paymentPage.checkInputValue(inputMouthIndex, "");
+        paymentPage.getErrorOfMouthInput(noticeWrongFormat);
     }
 
     @Test
@@ -267,8 +268,8 @@ public class CreditTests {
         paymentPage.insertCardData(cardInfo);
         paymentPage.sendForm();
 
-        assertEquals(1, paymentPage.getCountErrorsOfValidation());
-        assertEquals(noticeCardExpired, paymentPage.getErrorOfYearInput());
+        paymentPage.isCountErrorsOfValidation(1);
+        paymentPage.getErrorOfYearInput(noticeCardExpired);
     }
 
     @Test
@@ -281,9 +282,9 @@ public class CreditTests {
         paymentPage.insertCardData(cardInfo);
         paymentPage.sendForm();
 
-        assertEquals(1, paymentPage.getCountErrorsOfValidation());
-        assertEquals("", paymentPage.getInputStr(inputYearIndex));
-        assertEquals(noticeWrongFormat, paymentPage.getErrorOfYearInput());
+        paymentPage.isCountErrorsOfValidation(1);
+        paymentPage.checkInputValue(inputYearIndex, "");
+        paymentPage.getErrorOfYearInput(noticeWrongFormat);
     }
 
     @Test
@@ -296,9 +297,9 @@ public class CreditTests {
         paymentPage.insertCardData(cardInfo);
         paymentPage.sendForm();
 
-        assertEquals(1, paymentPage.getCountErrorsOfValidation());
-        assertEquals("", paymentPage.getInputStr(inputYearIndex));
-        assertEquals(noticeRequiredField, paymentPage.getErrorOfYearInput());
+        paymentPage.isCountErrorsOfValidation(1);
+        paymentPage.checkInputValue(inputYearIndex, "");
+        paymentPage.getErrorOfYearInput(noticeRequiredField);
         // Баг - отображается подсказка неверного формата
     }
 
@@ -312,8 +313,8 @@ public class CreditTests {
         paymentPage.insertCardData(cardInfo);
         paymentPage.sendForm();
 
-        assertEquals(1, paymentPage.getCountErrorsOfValidation());
-        assertEquals(noticeCardExpired, paymentPage.getErrorOfYearInput());
+        paymentPage.isCountErrorsOfValidation(1);
+        paymentPage.getErrorOfYearInput(noticeCardExpired);
     }
 
     @Test
@@ -326,8 +327,8 @@ public class CreditTests {
         paymentPage.insertCardData(cardInfo);
         paymentPage.sendForm();
 
-        assertEquals(1, paymentPage.getCountErrorsOfValidation());
-        assertEquals(noticeRequiredField, paymentPage.getErrorOfHolderInput());
+        paymentPage.isCountErrorsOfValidation(1);
+        paymentPage.getErrorOfHolderInput(noticeRequiredField);
     }
 
     @Test
@@ -340,9 +341,8 @@ public class CreditTests {
         paymentPage.insertCardData(cardInfo);
         paymentPage.sendForm();
 
-        assertEquals(1, paymentPage.getCountErrorsOfValidation());
-        assertEquals(noticeRequiredField, paymentPage.getErrorOfHolderInput());
-
+        paymentPage.isCountErrorsOfValidation(1);
+        paymentPage.getErrorOfHolderInput(noticeRequiredField);
         // Баг - нет валидации на отсутствие фамилии
     }
 
@@ -356,8 +356,8 @@ public class CreditTests {
         paymentPage.insertCardData(cardInfo);
         paymentPage.sendForm();
 
-        assertEquals(1, paymentPage.getCountErrorsOfValidation());
-        assertEquals(noticeWrongFormat, paymentPage.getErrorOfHolderInput());
+        paymentPage.isCountErrorsOfValidation(1);
+        paymentPage.getErrorOfHolderInput(noticeWrongFormat);
         // Баг - нет валидации поля на ввод кириллицы
     }
 
@@ -371,8 +371,8 @@ public class CreditTests {
         paymentPage.insertCardData(cardInfo);
         paymentPage.sendForm();
 
-        assertEquals(1, paymentPage.getCountErrorsOfValidation());
-        assertEquals(noticeWrongFormat, paymentPage.getErrorOfHolderInput());
+        paymentPage.isCountErrorsOfValidation(1);
+        paymentPage.getErrorOfHolderInput(noticeWrongFormat);
         // Баг - нет валидации поля на ввод кириллицы
     }
 
@@ -386,8 +386,8 @@ public class CreditTests {
         paymentPage.insertCardData(cardInfo);
         paymentPage.sendForm();
 
-        assertEquals(1, paymentPage.getCountErrorsOfValidation());
-        assertEquals(noticeWrongFormat, paymentPage.getErrorOfHolderInput());
+        paymentPage.isCountErrorsOfValidation(1);
+        paymentPage.getErrorOfHolderInput(noticeWrongFormat);
         // Баг - нет валидации поля на ввод спец. символов
     }
 
@@ -401,8 +401,8 @@ public class CreditTests {
         paymentPage.insertCardData(cardInfo);
         paymentPage.sendForm();
 
-        assertEquals(1, paymentPage.getCountErrorsOfValidation());
-        assertEquals(noticeWrongFormat, paymentPage.getErrorOfHolderInput());
+        paymentPage.isCountErrorsOfValidation(1);
+        paymentPage.getErrorOfHolderInput(noticeWrongFormat);
         // Баг - нет валидации поля на ввод цифр
     }
 
@@ -416,8 +416,8 @@ public class CreditTests {
         paymentPage.insertCardData(cardInfo);
         paymentPage.sendForm();
 
-        assertEquals(1, paymentPage.getCountErrorsOfValidation());
-        assertEquals(noticeRequiredField, paymentPage.getErrorOfCvcInput());
+        paymentPage.isCountErrorsOfValidation(1);
+        paymentPage.getErrorOfCvcInput(noticeRequiredField);
         // Баг - отображается две подсказки валидации поля, должна быть одна
     }
 
@@ -431,9 +431,9 @@ public class CreditTests {
         paymentPage.insertCardData(cardInfo);
         paymentPage.sendForm();
 
-        assertEquals(1, paymentPage.getCountErrorsOfValidation());
-        assertEquals(noticeRequiredField, paymentPage.getErrorOfCvcInput());
-        assertEquals("", paymentPage.getInputStr(inputCvcIndex));
+        paymentPage.isCountErrorsOfValidation(1);
+        paymentPage.getErrorOfCvcInput(noticeRequiredField);
+        paymentPage.checkInputValue(inputCvcIndex, "");
         // Баг - отображается две подсказки валидации поля, должна быть одна
     }
 
@@ -447,9 +447,9 @@ public class CreditTests {
         paymentPage.insertCardData(cardInfo);
         paymentPage.sendForm();
 
-        assertEquals(1, paymentPage.getCountErrorsOfValidation());
-        assertEquals(noticeRequiredField, paymentPage.getErrorOfCvcInput());
-        assertEquals("", paymentPage.getInputStr(inputCvcIndex));
+        paymentPage.isCountErrorsOfValidation(1);
+        paymentPage.getErrorOfCvcInput(noticeRequiredField);
+        paymentPage.checkInputValue(inputCvcIndex, "");
         // Баг - отображается две подсказки валидации поля, должна быть одна
     }
 
@@ -463,9 +463,9 @@ public class CreditTests {
         paymentPage.insertCardData(cardInfo);
         paymentPage.sendForm();
 
-        assertEquals(1, paymentPage.getCountErrorsOfValidation());
-        assertEquals(noticeRequiredField, paymentPage.getErrorOfCvcInput());
-        assertEquals("", paymentPage.getInputStr(inputCvcIndex));
+        paymentPage.isCountErrorsOfValidation(1);
+        paymentPage.getErrorOfCvcInput(noticeRequiredField);
+        paymentPage.checkInputValue(inputCvcIndex, "");
         // Баг - отображается две подсказки валидации поля, должна быть одна
     }
 
@@ -474,12 +474,14 @@ public class CreditTests {
     void cvc4Digits() {
         CardData cardInfo = new CardData(getApprovedCard(), randomMouth(), randomYear(), randomHolder(), randomNumber(4));
 
+        String cvc = cardInfo.getCvc().substring(0, cardInfo.getCvc().length() - 1);
+
         BasicPage mainPage = new BasicPage();
         PaymentPage paymentPage = mainPage.payOnCredit();
         paymentPage.insertCardData(cardInfo);
         paymentPage.sendForm();
 
-        assertEquals(3, paymentPage.getInputStr(inputCvcIndex).length());
+        paymentPage.checkInputValue(inputCvcIndex, cvc);
         paymentPage.getNotificationMsg(noticeSuccess);
     }
 
@@ -493,7 +495,7 @@ public class CreditTests {
         paymentPage.insertCardData(cardInfo);
         paymentPage.sendForm();
 
-        assertEquals(1, paymentPage.getCountErrorsOfValidation());
-        assertEquals(noticeWrongFormat, paymentPage.getErrorOfCvcInput());
+        paymentPage.isCountErrorsOfValidation(1);
+        paymentPage.getErrorOfCvcInput(noticeWrongFormat);
     }
 }

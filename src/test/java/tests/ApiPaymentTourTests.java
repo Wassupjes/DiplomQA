@@ -2,20 +2,22 @@ package tests;
 
 import com.codeborne.selenide.logevents.SelenideLogger;
 import data.CardData;
-import io.qameta.allure.selenide.AllureSelenide;
 import org.junit.jupiter.api.*;
 
 import static data.APIHelper.*;
 import static data.DataHelper.*;
 import static data.SQLRequestHelper.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ApiPaymentTourTests {
     private final String approvedStatus = "APPROVED";
     private final String declinedStatus = "DECLINED";
 
+    private final String endpointDebitCard = "/api/v1/pay";
+    private final String endpointCreditCard = "/api/v1/credit";
+
     @BeforeAll
     static void setupAll() {
-        SelenideLogger.addListener("allure", new AllureSelenide());
         deleteBaseRec();
     }
 
@@ -26,7 +28,6 @@ public class ApiPaymentTourTests {
 
     @AfterAll
     public static void tearDownAll() {
-        SelenideLogger.removeListener("allure");
     }
 
     @Test
@@ -34,11 +35,11 @@ public class ApiPaymentTourTests {
     public void successfulPayFromApprovedDebitCard() {
         CardData card = getApprovedCardData();
 
-        String requestStatus = requestToDebitCard(card);
+        String requestStatus = requestToCard(card, endpointDebitCard);
         String dbStatus = getValuePaymentEntity();
 
-        Assertions.assertEquals(approvedStatus, requestStatus);
-        Assertions.assertEquals(approvedStatus, dbStatus);
+        assertAll(() -> assertEquals(approvedStatus, requestStatus),
+                () -> assertEquals(approvedStatus, dbStatus));
     }
 
     @Test
@@ -46,11 +47,11 @@ public class ApiPaymentTourTests {
     public void successfulPayFromApprovedCreditCard() {
         CardData card = getApprovedCardData();
 
-        String requestStatus = requestToCreditCard(card);
+        String requestStatus = requestToCard(card, endpointDebitCard);
         String dbStatus = getValueCreditRequestEntity();
 
-        Assertions.assertEquals(approvedStatus, requestStatus);
-        Assertions.assertEquals(approvedStatus, dbStatus);
+        assertAll(() -> assertEquals(approvedStatus, requestStatus),
+                () -> assertEquals(approvedStatus, dbStatus));
     }
 
     @Test
@@ -58,11 +59,11 @@ public class ApiPaymentTourTests {
     public void failedPayFromApprovedDebitCard() {
         CardData card = getDeclinedCardData();
 
-        String requestStatus = requestToDebitCard(card);
+        String requestStatus = requestToCard(card, endpointCreditCard);
         String dbStatus = getValuePaymentEntity();
 
-        Assertions.assertEquals(declinedStatus, requestStatus);
-        Assertions.assertEquals(declinedStatus, dbStatus);
+        assertAll(() -> assertEquals(declinedStatus, requestStatus),
+                () -> assertEquals(declinedStatus, dbStatus));
     }
 
     @Test
@@ -70,10 +71,10 @@ public class ApiPaymentTourTests {
     public void failedPayFromApprovedCreditCard() {
         CardData card = getDeclinedCardData();
 
-        String requestStatus = requestToCreditCard(card);
+        String requestStatus = requestToCard(card, endpointDebitCard);
         String dbStatus = getValueCreditRequestEntity();
 
-        Assertions.assertEquals(declinedStatus, requestStatus);
-        Assertions.assertEquals(declinedStatus, dbStatus);
+        assertAll(() -> assertEquals(declinedStatus, requestStatus),
+                () -> assertEquals(declinedStatus, dbStatus));
     }
 }

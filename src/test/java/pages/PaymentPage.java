@@ -44,35 +44,35 @@ public class PaymentPage {
         sendButton.click();
     }
 
-    public int getCountErrorsOfValidation() {
-        return $$(".input__sub").size();
+    public void isCountErrorsOfValidation(int size) {
+        $$(".input__sub").shouldHave(size(size));
     }
 
     public void getNotificationMsg(String msg) {
         $(".notification__title").shouldBe(visible, Duration.ofSeconds(20)).shouldHave(text(msg));
     }
 
-    public String getInputStr(int index) {
-        return formInputs.get(index).$(".input__control").getValue();
+    public void checkInputValue(int index, String text) {
+        formInputs.get(index).$(".input__control").shouldHave(value(text));
     }
 
-    public String getErrorOfNumberInput() {
-        return numberField.$(".input__sub").shouldBe(visible).getText();
+    public void getErrorOfNumberInput(String text) {
+        numberField.$(".input__sub").shouldBe(visible).shouldHave(text(text));
     }
 
-    public String getErrorOfMouthInput() {
-        return mouthField.$(".input__sub").shouldBe(visible).getText();
+    public void getErrorOfMouthInput(String text) {
+        mouthField.$(".input__sub").shouldBe(visible).shouldHave(text(text));
     }
 
-    public String getErrorOfYearInput() {
-        return yearField.$(".input__sub").shouldBe(visible).getText();
+    public void getErrorOfYearInput(String text) {
+        yearField.$(".input__sub").shouldBe(visible).shouldHave(text(text));
     }
 
-    public String getErrorOfHolderInput() {
-        return holderField.$(".input__sub").shouldBe(visible).getText();
+    public void getErrorOfHolderInput(String text) {
+        holderField.$(".input__sub").shouldBe(visible).shouldHave(text(text));
     }
 
-    public String getErrorOfCvcInput() {
-        return cvcField.$(".input__sub").shouldBe(visible).getText();
+    public void getErrorOfCvcInput(String text) {
+        cvcField.$(".input__sub").shouldBe(visible).shouldHave(text(text));
     }
 }

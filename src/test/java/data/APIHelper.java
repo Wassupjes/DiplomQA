@@ -1,5 +1,6 @@
 package data;
 
+import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.http.ContentType;
@@ -17,24 +18,13 @@ public class APIHelper {
             .log(LogDetail.ALL)
             .build();
 
-    public static String requestToDebitCard(data.CardData card) {
+    public static String requestToCard(CardData card, String endpoint) {
         return given()
+                .filter(new AllureRestAssured())
                 .spec(requestSpec)
                 .body(card)
                 .when()
-                .post("/api/v1/pay")
-                .then()
-                .log().body()
-                .statusCode(200)
-                .extract().jsonPath().getString("status");
-    }
-
-    public static String requestToCreditCard(data.CardData card) {
-        return given()
-                .spec(requestSpec)
-                .body(card)
-                .when()
-                .post("/api/v1/credit")
+                .post(endpoint)
                 .then()
                 .log().body()
                 .statusCode(200)

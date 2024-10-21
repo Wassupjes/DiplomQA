@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'io.qameta.allure' version '2.11.2'
+    id("io.freefair.lombok") version "8.4"
 }
 
 group 'ru.netology'
@@ -23,6 +24,7 @@ dependencies {
     testImplementation 'com.github.javafaker:javafaker:1.0.2'
     testImplementation 'io.qameta.allure:allure-junit5'
     testImplementation 'io.qameta.allure:allure-selenide:2.22.0'
+    testImplementation 'io.qameta.allure:allure-rest-assured:2.29.0'
     testImplementation 'io.rest-assured:rest-assured:5.3.1'
     testImplementation 'io.rest-assured:json-schema-validator:4.3.1'
     testImplementation 'mysql:mysql-connector-java:8.0.32'
