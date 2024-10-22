@@ -1,6 +1,5 @@
 package tests;
 
-import com.codeborne.selenide.logevents.SelenideLogger;
 import data.CardData;
 import org.junit.jupiter.api.*;
 
@@ -47,7 +46,7 @@ public class ApiPaymentTourTests {
     public void successfulPayFromApprovedCreditCard() {
         CardData card = getApprovedCardData();
 
-        String requestStatus = requestToCard(card, endpointDebitCard);
+        String requestStatus = requestToCard(card, endpointCreditCard);
         String dbStatus = getValueCreditRequestEntity();
 
         assertAll(() -> assertEquals(approvedStatus, requestStatus),
@@ -59,7 +58,7 @@ public class ApiPaymentTourTests {
     public void failedPayFromApprovedDebitCard() {
         CardData card = getDeclinedCardData();
 
-        String requestStatus = requestToCard(card, endpointCreditCard);
+        String requestStatus = requestToCard(card, endpointDebitCard);
         String dbStatus = getValuePaymentEntity();
 
         assertAll(() -> assertEquals(declinedStatus, requestStatus),
@@ -71,7 +70,7 @@ public class ApiPaymentTourTests {
     public void failedPayFromApprovedCreditCard() {
         CardData card = getDeclinedCardData();
 
-        String requestStatus = requestToCard(card, endpointDebitCard);
+        String requestStatus = requestToCard(card, endpointCreditCard);
         String dbStatus = getValueCreditRequestEntity();
 
         assertAll(() -> assertEquals(declinedStatus, requestStatus),
