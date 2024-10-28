@@ -434,7 +434,6 @@ public class CreditTests {
         paymentPage.isCountErrorsOfValidation(1);
         paymentPage.getErrorOfCvcInput(noticeRequiredField);
         paymentPage.checkInputValue(inputCvcIndex, "");
-        // Баг - отображается две подсказки валидации поля, должна быть одна
     }
 
     @Test
@@ -450,7 +449,6 @@ public class CreditTests {
         paymentPage.isCountErrorsOfValidation(1);
         paymentPage.getErrorOfCvcInput(noticeRequiredField);
         paymentPage.checkInputValue(inputCvcIndex, "");
-        // Баг - отображается две подсказки валидации поля, должна быть одна
     }
 
     @Test
@@ -466,7 +464,6 @@ public class CreditTests {
         paymentPage.isCountErrorsOfValidation(1);
         paymentPage.getErrorOfCvcInput(noticeRequiredField);
         paymentPage.checkInputValue(inputCvcIndex, "");
-        // Баг - отображается две подсказки валидации поля, должна быть одна
     }
 
     @Test
